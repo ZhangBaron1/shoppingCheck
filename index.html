@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>商品加减与统计结果</title>
+<script>
+window.onload = function () {
+	var oUl = document.getElementById('list');
+	var aLi = oUl.getElementsByTagName('li');
+	var oP = document.getElementsByTagName('p')[0];
+	var nCount = 0;
+	var nMaxP = 0;
+    var nTotalP = 0;
+	for ( var i=0; i<aLi.length; i++ ) {
+		fnCount ( aLi[i] );
+	}
+	function getMaxPrice(){
+        nMaxP = 0;
+        for ( var i=0; i<aLi.length; i++ ) {
+            var oEm = aLi[i].getElementsByTagName ('em')[0];
+            var price = parseFloat(oEm.innerHTML);
+            var oStrong = aLi[i].getElementsByTagName('strong')[0];
+            if(oStrong.innerHTML>0)
+                nMaxP = price>nMaxP?price:nMaxP;
+            console.log(oStrong.innerHTML,price,nMaxP);
+        }
+    }
+	function checkTip(){
+        var aSpan = oP.getElementsByTagName('span');
+        aSpan[0].innerHTML = nCount + '件';
+        aSpan[2].innerHTML = nMaxP + '元';
+        aSpan[1].innerHTML = nTotalP + '元';
+    }
+	function fnCount ( li ) {
+		var aBtn = li.getElementsByTagName ('input');
+		var oStrong = li.getElementsByTagName ('strong')[0];
+		var oEm = li.getElementsByTagName ('em')[0];
+        var oSpan = li.getElementsByTagName ('span')[0];
+		var n = oStrong.innerHTML;			// '0'
+		var price = parseFloat(oEm.innerHTML);			// 12.5
+
+		aBtn[0].onclick = function () {
+			if ( n > 0 ) {
+				n--;
+                nCount--;
+                nTotalP = parseFloat(nTotalP) - price;
+			}
+			oStrong.innerHTML = n;
+			oSpan.innerHTML = n*price + '元';
+            getMaxPrice();
+            checkTip();
+		};
+		aBtn[1].onclick = function () {
+			n++;
+            nCount++;
+			oStrong.innerHTML = n;
+			oSpan.innerHTML = n*price + '元';
+            nTotalP = price+parseFloat(nTotalP);
+            getMaxPrice();
+            checkTip();
+		};
+
+	}
+};
+</script>
+</head>
+
+<body>
+
+<ul id="list">
+	<li>
+  	<input type="button" value="-" />
+    <strong>0</strong>
+  	<input type="button" value="+" />
+    单价：<em>12.5元</em>
+    小计：<span>0元</span>
+  </li>
+	<li>
+  	<input type="button" value="-" />
+    <strong>0</strong>
+  	<input type="button" value="+" />
+    单价：<em>10.5元</em>
+    小计：<span>0元</span>
+  </li>
+	<li>
+  	<input type="button" value="-" />
+    <strong>0</strong>
+  	<input type="button" value="+" />
+    单价：<em>8.5元</em>
+    小计：<span>0元</span>
+  </li>
+	<li>
+  	<input type="button" value="-" />
+    <strong>0</strong>
+  	<input type="button" value="+" />
+    单价：<em>8元</em>
+    小计：<span>0元</span>
+  </li>
+	<li>
+  	<input type="button" value="-" />
+    <strong>0</strong>
+  	<input type="button" value="+" />
+    单价：<em>14.5元</em>
+    小计：<span>0元</span>
+  </li>
+</ul>
+
+<p>
+商品合计共：<span>0件</span>，共花费了：<span>0元</span><br />
+其中最贵的商品单价是：<span>0元</span>
+</p>
+
+</body>
+</html>
